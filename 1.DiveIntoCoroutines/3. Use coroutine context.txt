@@ -1,0 +1,67 @@
+RC-182.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+1. Dive Into Coroutine
+
+4. Use coroutine context
+
+
+COROUTINECONTEXT: Set<Elemente>
+	Each element hast a single and unique purpose.
+	Element type: => CoroutineContext.Element
+	Each element has:
+		- a single purpose (responsibility)
+		- unique and distinguishable
+		- combined use
+	Component:
+		- ContinuationInterceptor: govern the each thread or the thread pull. For dispachers
+		- ExceptionHandler
+		- Job
+
+DISPATCHERs class:
+	- Default. For general purpose background work which depends on the CPU..
+	- IO: for input and output operations
+	- Unconfined: Using for testing.
+	- Main: only in UI driven apps (swing, JavaFX or Android apps) to communicate to the main thread
+	
+
+COROUTINECONTEXT.
+- ContinuationInterceptor -> Threading
+- ExceptionHandler -> exception Handling
+- Job -> Lifecycle
+
+
+Job: represents a coroutine wrapped in an object. The jobs have a lifecycle
+
+      start             wait children        finish
+NEW  --------> ACTIVE --------> COMPLETING ---------> completed
+
+                | cancel/fail       |
+                +-------------------+  
+                |
+                |              finish
+                +->CANCELLING --------> CANCELLED
+
+If a job or its children fail or get canceled, everything in a parent child hierarchy
+goes into the canceling state
+
+3 way to finish a job: positively or fail by an exception or by canceling
+
+
+The roof coating lifecycle => if you cancel the parent before running the child, nathing will happen.
+The child simple won't be executed.
+
+COROUTINECONTEXT = CONTINUATIONINTERCEPTOR + EXCEPTIONHANDLER + JOB
+
+
+
+
+
+
+
+
+
+
+	
