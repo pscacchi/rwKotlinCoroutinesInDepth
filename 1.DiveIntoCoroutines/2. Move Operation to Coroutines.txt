@@ -1,0 +1,76 @@
+RC-181.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+1. Dive Into Coroutine
+
+2. Move Operations to Coroutines
+
+
+CORE CONCEPTS => BASIC IMPLEMENTATION => ADVENTAGE USAGE => AWESOME FEATUREs
+
+CORE CONCEPTS => Launching coroutines => Coroutine builders
+Configuration -> Coroutine builder -> Launch a coroutine
+
+Use ItelliJ IDEA => Gradle project
+
+blocking code:
+In main func
+    getUserByIdFromNetwork(userId) { user ->
+      println(user)
+    }
+
+Out of main:
+
+private fun getUserByIdFromNetwork(userId: Int, onUserReady: (User) -> Unit) {
+  Thread.sleep(3000)
+
+  onUserReady(User(userId, "Filip", "Babic"))
+}
+
+
+Using coroutines
+
+  val job = GlobalScope.launch(start = CoroutineStart.LAZY) {
+    getUserByIdFromNetwork(userId) { user ->
+      println(user)
+    }
+  }
+
+  job.start()
+  while (job.isActive) {
+
+  }
+
+launch() function is defined as an extension function of CoroutineScope
+	context aditional: something similar to the android's context where you get all the necessary configuration
+	third parameter is a suspend function.
+	return a Job
+
+Android context
+	Theme
+	Respurces
+	Device configuration
+	System services
+
+Coroutine context:
+	Exception handling
+	Lifedcycle
+	Threading
+
+
+JOB: the base representation of a coroutine
+- start()
+- cancel()
+- isActive()
+- isCancelled()
+- join()
+- Children
+
+
+The job is active property will be true as long as the coroutine hasn't been cancelled ot
+it hasn't finished.
+
+Chancge parameter (start = CoroutineStart.LAZY) produce no output.
+
