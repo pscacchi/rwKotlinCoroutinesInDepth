@@ -1,0 +1,43 @@
+RC-183.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+1. Dive Into Coroutine
+
+4. Use Advance Job Functionality
+
+
+COROUTINECONTEXT:
+	- Dispacher
+	- ExceptionHandler
+	- Job
+
+JOB
+- Operation: start, combine/join, cancel.
+- Lifecycle: active, finished, cancelled
+- Start: lazy or eager
+
+if you cancel a code, you may end up janging code which never finishes.
+
+When cancel a Running job, this is cancelled and the every job in the hierarchy.
+
+
+Being cooperative means that your code cooperates with a state of its context as the name suggests.
+
+
+For more cooperative (if (isActive) {})
+
+  val job = GlobalScope.launch(context =
+  Dispatchers.Default + exceptionHandler + parentJob) {
+
+    for (i in 0..100_000_000) {
+      if (isActive) {
+        println("Currently in iteration: $i")
+      } else {
+        break
+      }
+    }
+
+JOIN function
+Using the join function you ca attach one job to another.
