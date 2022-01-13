@@ -1,11 +1,11 @@
-RC-180.
+RC-183.
 
 raywenderlich.com
 Kotlin coroutines: In Depth
 
-1. Dive Into Coroutine
+2. Implement coroutines in Android
 
-1. Start learning Kotlin Coroutines
+1. Examine the project
 
 
 Aproach to async code in Android

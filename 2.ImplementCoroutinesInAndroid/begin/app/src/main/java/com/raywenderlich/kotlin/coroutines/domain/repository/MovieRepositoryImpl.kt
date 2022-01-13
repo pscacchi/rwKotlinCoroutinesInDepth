@@ -33,11 +33,11 @@ import com.raywenderlich.kotlin.coroutines.data.api.MovieApiService
 import com.raywenderlich.kotlin.coroutines.data.database.MovieDao
 import com.raywenderlich.kotlin.coroutines.di.API_KEY
 import com.raywenderlich.kotlin.coroutines.data.model.Movie
-import com.raywenderlich.kotlin.coroutines.data.model.MoviesResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
+import com.raywenderlich.kotlin.coroutines.data.model.Result
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 /**
  * Connects to the end entity, and exposes functionality to the user.
@@ -47,33 +47,28 @@ class MovieRepositoryImpl(
     private val movieDao: MovieDao
 ) : MovieRepository {
 
-  override fun getMovies(
-      onMoviesReceived: (List<Movie>) -> Unit,
-      onError: (Throwable) -> Unit
-  ) {
-    movieApiService.getMovies(API_KEY).enqueue(object : Callback<MoviesResponse> {
-      override fun onFailure(call: Call<MoviesResponse>, throwable: Throwable) {
-        val savedMovies = movieDao.getSavedMovies()
+  override suspend fun getMovies(): Result<List<Movie>> = withContext(Dispatchers.IO) {
 
-        /**
-         * If there's no internet connection, default to the cached values.
-         * Otherwise propagate the error.
-         * */
-        if (throwable is IOException && savedMovies.isNotEmpty()) {
-          onMoviesReceived(savedMovies)
-        } else {
-          onError(throwable)
-        }
+    val cachedMoviesDeferred = async { movieDao.getSavedMovies() }
+    val resultDeferred = async { movieApiService.getMovies(API_KEY).execute() }
+
+    val cachedMovies = cachedMoviesDeferred.await()
+
+    try {
+      val result = resultDeferred.await()
+      val moviesResponse = result.body()?.movies
+
+      if (result.isSuccessful && moviesResponse != null) {
+        Result(moviesResponse, null)
+      } else {
+        Result(cachedMovies, null)
       }
-
-      override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
-        val movies = response.body()?.movies ?: emptyList()
-
-        if (movies.isNotEmpty()) {
-          movieDao.saveMovies(movies)
-        }
-        onMoviesReceived(movies)
+    } catch (error: Throwable) {
+      if (error is IOException && cachedMovies.isEmpty()) {
+        Result(null, error)
+      } else {
+        Result(cachedMovies, null)
       }
-    })
+    }
   }
 }

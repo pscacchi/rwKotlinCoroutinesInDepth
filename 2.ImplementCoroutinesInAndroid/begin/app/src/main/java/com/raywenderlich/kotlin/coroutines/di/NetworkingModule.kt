@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 private const val BASE_URL = "https://api.themoviedb.org/"
-const val API_KEY = "insert-api-key-here"
+const val API_KEY = "2e757df0d68edb9fafa9d06cb17b0cf1"
 const val MOVIE_IMAGE_BASE_PATH = "https://image.tmdb.org/t/p/w500"
 
 fun networkingModule() = module {

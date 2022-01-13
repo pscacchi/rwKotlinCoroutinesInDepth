@@ -1,0 +1,27 @@
+RC-184.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+2. Implement coroutines in Android
+
+2. Implement coroutines in Android
+
+To use coroutine instead of callbacks
+
+LAUNCHING COROUTINES            ===> create a coroutin
+	+ CoroutineScope
+	+ CoroutineContext
+	+ Launch a builder
+
+Two ways to implement the scope or context of your coroutine
+	- Background-First: all your code will run in the background by default and 
+               then any value you have which you need to represent in the UI you have
+               to once more create a Coroutine and push it to the UI thread.
+	       This offloads the main thread a lot because things are running in the
+               background by default but it's also more error prone. You have to 
+               switch back to the main thread before displaying data on the UI
+	- Main-First: your Coroutines run on the main thread by default. And if you
+               want to fetch some data from the cackground, you can push those
+               fetching operations to the background thread and once the data is
+               ready you don't have to switch back to the main thread
