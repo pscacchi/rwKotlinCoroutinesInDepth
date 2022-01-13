@@ -66,4 +66,14 @@ class MoviesActivity : AppCompatActivity(), MoviesView {
     swipeToRefresh.isRefreshing = false
     // handle error
   }
+
+  override fun onStop() {
+    presenter.stop()
+    super.onStop()
+  }
+
+  override fun onStart() {
+    super.onStart()
+    presenter.getData()
+  }
 }
