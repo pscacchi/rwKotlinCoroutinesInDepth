@@ -1,0 +1,49 @@
+RC-180.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+1. Dive Into Coroutine
+
+1. Start learning Kotlin Coroutines
+
+
+Aproach to async code in Android
+	- Native: (Very expensive)
+		Thread
+		Runnable
+		Problem: memory leaks y app freeze
+	- 3rd party library
+		Callback
+		Observable
+		Multithreading and parallel execution
+		Problem: Callback hell, cognitive overhead
+
+
+Kotlin coroutine
+	Easy to write
+	Easy to refactor
+	Sequential
+	Undersatndable
+
+Kotlin coroutines
+	- Sequential functions = asynchronous results
+
+
+concept of suspension of coroutines: it's the means of pausing a function to the use
+of suspendable function calls, adding keyword suspend. It
+allows you to pause and resume when needed.
+When a getter 're fetching a value, the parent coroutine block it
+until the data is available.
+the code won't expose that neither to callbacks nor to streams of data.
+
+One limitation of suspendability is that you cannot call suspendable functions
+outside of other suspendable function or coroutines.
+
+
+COROUTINE INTERNALS
+Predefined thread pools
+Kotlin standard library
+
+
+		
