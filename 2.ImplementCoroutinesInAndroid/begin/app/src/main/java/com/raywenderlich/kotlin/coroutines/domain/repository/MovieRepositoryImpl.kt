@@ -29,6 +29,7 @@
  */
 package com.raywenderlich.kotlin.coroutines.domain.repository
 
+import com.raywenderlich.kotlin.coroutines.contextProvider.CoroutineContextProvider
 import com.raywenderlich.kotlin.coroutines.data.api.MovieApiService
 import com.raywenderlich.kotlin.coroutines.data.database.MovieDao
 import com.raywenderlich.kotlin.coroutines.di.API_KEY
@@ -44,10 +45,11 @@ import kotlinx.coroutines.withContext
  */
 class MovieRepositoryImpl(
     private val movieApiService: MovieApiService,
-    private val movieDao: MovieDao
+    private val movieDao: MovieDao,
+    private val contextProvider: CoroutineContextProvider
 ) : MovieRepository {
 
-  override suspend fun getMovies(): Result<List<Movie>> = withContext(Dispatchers.IO) {
+  override suspend fun getMovies(): Result<List<Movie>> = withContext(contextProvider.context()) {
 
     val cachedMoviesDeferred = async { movieDao.getSavedMovies() }
     val resultDeferred = async { movieApiService.getMovies(API_KEY).execute() }
