@@ -1,0 +1,25 @@
+RC-190.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+3. Debug & test coroutines
+
+2. Debug and log coruitines.
+
+ASYNCHRONOUS PROGRAMMING ISSUES
+- Thread sync
+- Exception Handling
+- Debugging & Logging
+
+
+ASYNCHRONOUS PROGRAMMING
+- Race conditions
+- Parellelism
+- Synchronization
+- Multi-threading
+
+Debuger isn't good.
+checkout isn't ideal.
+
+Debug relies heavily on the ability to log valuable
