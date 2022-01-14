@@ -1,0 +1,25 @@
+RC-189.
+
+raywenderlich.com
+Kotlin coroutines: In Depth
+
+3. Debug & test coroutines
+
+1. Handle exception
+
+Exceptions can also occur in coroutines.
+
+You need to seek hot to handle any unwanted errors, which would
+otherwise finish your program esarly.
+
+3 effective ways of dealing with exceptions in coroutines.
+	1º- try-catch block: intercept de exception and provide some fallback logic.
+                 it won't stop your code from running, so you can proceed with it even
+                 if think break.
+	2º integrate it into the kotlin coroutines API. It colled a coroutine exception
+                 handler, andit's use automatically handle exceptions in coroutine.
+                     CoroutineExceptionHandler()
+                 If an error does occur, the coroutine will stop running, and your coude
+                 might not execute fully.
+        3º combine both try catch blocks and the exception handler.
+                 withContext wraps the value or an exception in a Result object
