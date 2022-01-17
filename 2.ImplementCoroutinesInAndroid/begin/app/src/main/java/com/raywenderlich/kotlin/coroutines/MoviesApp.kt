@@ -48,5 +48,7 @@ class MoviesApp : Application() {
       androidContext(this@MoviesApp)
       modules(listOf(appModule(), networkingModule(), presenterModule()))
     }
+
+    if (BuildConfig.DEBUG) System.setProperty("kotlinx.coroutines.debug", "on")
   }
 }

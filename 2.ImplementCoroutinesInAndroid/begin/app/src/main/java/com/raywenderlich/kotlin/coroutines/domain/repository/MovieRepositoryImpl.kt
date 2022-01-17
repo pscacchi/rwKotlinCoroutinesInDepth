@@ -36,8 +36,10 @@ import com.raywenderlich.kotlin.coroutines.di.API_KEY
 import com.raywenderlich.kotlin.coroutines.data.model.Movie
 import java.io.IOException
 import com.raywenderlich.kotlin.coroutines.data.model.Result
+import com.raywenderlich.kotlin.coroutines.utils.logCoroutine
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import okhttp3.internal.checkOffsetAndCount
 
 /**
  * Connects to the end entity, and exposes functionality to the user.
@@ -47,18 +49,23 @@ class MovieRepositoryImpl(
     private val movieDao: MovieDao,
     private val contextProvider: CoroutineContextProvider
 ) : MovieRepository {
-
     override suspend fun getMovies(): List<Movie> =
         withContext(contextProvider.context()) {
-
+            logCoroutine("getMovies", coroutineContext)
             // throw IllegalStateException("Test error")
 
-            val cachedMoviesDeferred = async { movieDao.getSavedMovies() }
-            val resultDeferred = async { movieApiService.getMovies(API_KEY).execute() }
+            val cachedMoviesDeferred = async {
+                logCoroutine("getSavedMovies", coroutineContext)
+                movieDao.getSavedMovies()
+            }
+            val resultDeferred = async {
+                logCoroutine("execute", coroutineContext)
+                movieApiService.getMovies(API_KEY).execute()
+            }
 
             val cachedMovies = cachedMoviesDeferred.await()
-            val apiMoview = resultDeferred.await().body()?.movies
+            val apiMovies = resultDeferred.await().body()?.movies
 
-            apiMoview ?: cachedMovies
+            apiMovies ?: cachedMovies
         }
 }

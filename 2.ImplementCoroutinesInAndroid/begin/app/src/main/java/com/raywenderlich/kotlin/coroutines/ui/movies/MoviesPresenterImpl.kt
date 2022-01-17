@@ -31,6 +31,7 @@ package com.raywenderlich.kotlin.coroutines.ui.movies
 
 import android.util.Log
 import com.raywenderlich.kotlin.coroutines.domain.repository.MovieRepository
+import com.raywenderlich.kotlin.coroutines.utils.logCoroutine
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -44,7 +45,7 @@ class MoviesPresenterImpl(private val movieRepository: MovieRepository)
         throwable.printStackTrace()
     }
     private val parentJob = SupervisorJob()
-    private lateinit var moviesView: MoviesView
+    private var moviesView: MoviesView? = null
 
     override fun setView(moviesView: MoviesView) {
         this.moviesView = moviesView
@@ -52,26 +53,22 @@ class MoviesPresenterImpl(private val movieRepository: MovieRepository)
 
     override fun getData() {
         launch {
+            logCoroutine("getData", coroutineContext)
+
             delay(500)
             val result = runCatching { movieRepository.getMovies() }
 
+            Log.d("TestCoroutine", "Still Alive!")
             result.onSuccess { movies ->
-                moviesView.showMovies(movies)
+                moviesView?.showMovies(movies)
             }.onFailure { error ->
                 handleError(error)
-            }.map {
-                it.size
-            }.onSuccess {
-                Log.d("Movies", "NumberOfMovies:$it")
             }
-
-            Log.d("TestCoroutine", "Still Alive!")
-
         }
     }
 
     private fun handleError(throwable: Throwable) {
-        moviesView.showError(throwable)
+        moviesView?.showError(throwable)
     }
 
     override fun stop() {
@@ -80,4 +77,5 @@ class MoviesPresenterImpl(private val movieRepository: MovieRepository)
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + parentJob + coroutineExceptionHandler
+
 }
